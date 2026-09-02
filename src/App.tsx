@@ -246,7 +246,7 @@ function App() {
             .from("profiles")
             .insert({
               id: user.id,
-              full_name: initialName,
+              student_name: initialName,
               college_name: "",
               branch_name: "",
               student_year: "",
@@ -284,7 +284,7 @@ function App() {
         .from("profiles")
         .upsert({
           id: user.id,
-          full_name:
+          student_name:
             studentName.trim() || "Student",
           college_name:
             collegeName.trim(),
@@ -1406,161 +1406,172 @@ const { error } =
       ]
     )
   }
+// =========================================================
+// CHANGE NUMBER OF CLASSES
+// =========================================================
 
-  // =========================================================
-  // CHANGE NUMBER OF CLASSES
-  // =========================================================
-
-  const changeClassesForDate = async (
-    subjectId: string,
-    newTotal: number
-  ) => {
-    if (
-      !selectedSemester ||
-      selectedSemester.completed
-    ) {
-      return
-    }
-
-    const safeTotal =
-      Math.max(1, newTotal)
-
-    const semesterDateKey =
-      `${selectedSemester.id}_${selectedDate}`
-
-    const { data: existingCount } =
-      await supabase
-        .from("class_counts")
-        .select("id")
-        .eq(
-          "semester_id",
-          selectedSemester.id
-        )
-        .eq(
-          "subject_id",
-          subjectId
-        )
-        .eq(
-          "date",
-          selectedDate
-        )
-        .maybeSingle()
-
-    let error = null
-
-    if (existingCount) {
-      const result =
-        await supabase
-          .from("class_counts")
-          .update({
-            total_classes:
-              safeTotal,
-          })
-          .eq(
-            "id",
-            existingCount.id
-          )
-
-      error = result.error
-    } else {
-      const {
-  data: { user },
-} = await supabase.auth.getUser()
-
-if (!user) {
-  window.alert("Please log in again.")
-  return
-}
-
-const result =
-  await supabase
-    .from("class_counts")
-    .insert({
-      id: crypto.randomUUID(),
-      user_id: user.id,
-      semester_id:
-        selectedSemester.id,
-      subject_id:
-        subjectId,
-      date: selectedDate,
-      total_classes:
-        safeTotal,
-    })
-
-      error = result.error
-    }
-
-    if (error) {
-      console.error(
-        "Error saving class count:",
-        error
-      )
-
-      window.alert(
-        `Could not save class count.\n\n${error.message}`
-      )
-
-      return
-    }
-
-    setClassesToday((current) => ({
-      ...current,
-      [semesterDateKey]: {
-        ...current[
-          semesterDateKey
-        ],
-        [subjectId]:
-          safeTotal,
-      },
-    }))
-
-    const { error: deleteError } =
-      await supabase
-        .from("attendance_records")
-        .delete()
-        .eq(
-          "semester_id",
-          selectedSemester.id
-        )
-        .eq(
-          "subject_id",
-          subjectId
-        )
-        .eq(
-          "date",
-          selectedDate
-        )
-        .gt(
-          "class_number",
-          safeTotal
-        )
-
-    if (deleteError) {
-      console.error(
-        "Error removing extra attendance:",
-        deleteError
-      )
-      return
-    }
-
-    setAttendanceRecords(
-      (records) =>
-        records.filter(
-          (record) =>
-            !(
-              record.semesterId ===
-                selectedSemester.id &&
-              record.subjectId ===
-                subjectId &&
-              record.date ===
-                selectedDate &&
-              record.classNumber >
-                safeTotal
-            )
-        )
-    )
+const changeClassesForDate = async (
+  subjectId: string,
+  newTotal: number
+) => {
+  if (
+    !selectedSemester ||
+    selectedSemester.completed
+  ) {
+    return
   }
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    window.alert("Please log in again.")
+    return
+  }
+
+  const safeTotal =
+    Math.max(1, newTotal)
+
+  const semesterDateKey =
+    `${selectedSemester.id}_${selectedDate}`
+
+  const { data: existingCount } =
+    await supabase
+      .from("class_counts")
+      .select("id")
+      .eq(
+        "user_id",
+        user.id
+      )
+      .eq(
+        "semester_id",
+        selectedSemester.id
+      )
+      .eq(
+        "subject_id",
+        subjectId
+      )
+      .eq(
+        "date",
+        selectedDate
+      )
+      .maybeSingle()
+
+  let error = null
+
+  if (existingCount) {
+    const result =
+      await supabase
+        .from("class_counts")
+        .update({
+          total_classes:
+            safeTotal,
+        })
+        .eq(
+          "id",
+          existingCount.id
+        )
+        .eq(
+          "user_id",
+          user.id
+        )
+
+    error = result.error
+  } else {
+    const result =
+      await supabase
+        .from("class_counts")
+        .insert({
+          id: crypto.randomUUID(),
+          user_id: user.id,
+          semester_id:
+            selectedSemester.id,
+          subject_id:
+            subjectId,
+          date: selectedDate,
+          total_classes:
+            safeTotal,
+        })
+
+    error = result.error
+  }
+
+  if (error) {
+    console.error(
+      "Error saving class count:",
+      error
+    )
+
+    window.alert(
+      `Could not save class count.\n\n${error.message}`
+    )
+
+    return
+  }
+
+  setClassesToday((current) => ({
+    ...current,
+    [semesterDateKey]: {
+      ...current[
+        semesterDateKey
+      ],
+      [subjectId]:
+        safeTotal,
+    },
+  }))
+
+  const { error: deleteError } =
+    await supabase
+      .from("attendance_records")
+      .delete()
+      .eq(
+        "user_id",
+        user.id
+      )
+      .eq(
+        "semester_id",
+        selectedSemester.id
+      )
+      .eq(
+        "subject_id",
+        subjectId
+      )
+      .eq(
+        "date",
+        selectedDate
+      )
+      .gt(
+        "class_number",
+        safeTotal
+      )
+
+  if (deleteError) {
+    console.error(
+      "Error removing extra attendance:",
+      deleteError
+    )
+
+    return
+  }
+
+  setAttendanceRecords(
+    (records) =>
+      records.filter(
+        (record) =>
+          !(
+            record.semesterId ===
+              selectedSemester.id &&
+            record.subjectId ===
+              subjectId &&
+            record.date ===
+              selectedDate &&
+            record.classNumber >
+              safeTotal
+          )
+      )
+  )
+}
   // =========================================================
   // CHANGE DATE
   // =========================================================
