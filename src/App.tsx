@@ -1027,17 +1027,27 @@ function App() {
       requiredAttendance: 75,
     }
 
-    const { error } =
-      await supabase
-        .from("subjects")
-        .insert({
-          id: newSubject.id,
-          semester_id:
-            newSubject.semesterId,
-          name: newSubject.name,
-          required_attendance:
-            newSubject.requiredAttendance,
-        })
+    const {
+  data: { user },
+} = await supabase.auth.getUser()
+
+if (!user) {
+  window.alert("Please log in again.")
+  return
+}
+
+const { error } =
+  await supabase
+    .from("subjects")
+    .insert({
+      id: newSubject.id,
+      user_id: user.id,
+      semester_id:
+        newSubject.semesterId,
+      name: newSubject.name,
+      required_attendance:
+        newSubject.requiredAttendance,
+    })
 
     if (error) {
       console.error(
