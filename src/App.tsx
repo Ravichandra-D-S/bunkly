@@ -1289,12 +1289,11 @@ const { error } =
     status: AttendanceStatus
   ) => {
     if (
-      !selectedSemester ||
-      selectedSemester.completed ||
-      !user
-    ) {
-      return
-    }
+  !selectedSemester ||
+  selectedSemester.completed
+) {
+  return
+}
 
     const existingRecord =
       attendanceRecords.find(
@@ -1362,20 +1361,30 @@ const { error } =
         status,
       }
 
-    const { error } =
-      await supabase
-        .from("attendance_records")
-        .insert({
-          id: newRecord.id,
-          semester_id:
-            newRecord.semesterId,
-          subject_id:
-            newRecord.subjectId,
-          date: newRecord.date,
-          class_number:
-            newRecord.classNumber,
-          status: newRecord.status,
-        })
+   const {
+  data: { user },
+} = await supabase.auth.getUser()
+
+if (!user) {
+  window.alert("Please log in again.")
+  return
+}
+
+const { error } =
+  await supabase
+    .from("attendance_records")
+    .insert({
+      id: newRecord.id,
+      user_id: user.id,
+      semester_id:
+        newRecord.semesterId,
+      subject_id:
+        newRecord.subjectId,
+      date: newRecord.date,
+      class_number:
+        newRecord.classNumber,
+      status: newRecord.status,
+    })
 
     if (error) {
       console.error(
