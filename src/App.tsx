@@ -1463,19 +1463,29 @@ const { error } =
 
       error = result.error
     } else {
-      const result =
-        await supabase
-          .from("class_counts")
-          .insert({
-            id: crypto.randomUUID(),
-            semester_id:
-              selectedSemester.id,
-            subject_id:
-              subjectId,
-            date: selectedDate,
-            total_classes:
-              safeTotal,
-          })
+      const {
+  data: { user },
+} = await supabase.auth.getUser()
+
+if (!user) {
+  window.alert("Please log in again.")
+  return
+}
+
+const result =
+  await supabase
+    .from("class_counts")
+    .insert({
+      id: crypto.randomUUID(),
+      user_id: user.id,
+      semester_id:
+        selectedSemester.id,
+      subject_id:
+        subjectId,
+      date: selectedDate,
+      total_classes:
+        safeTotal,
+    })
 
       error = result.error
     }
