@@ -1959,90 +1959,62 @@ const changeClassesForDate = async (
 
         <section className="semester-section">
 
-          <div className="section-header">
+          <div className="semester-compact-header">
 
-            <div>
+  <div className="semester-title">
 
-              <p className="eyebrow">
-                CURRENT SEMESTER
-              </p>
+    <p className="eyebrow">
+      CURRENT SEMESTER
+    </p>
 
-              <h2>
-                {selectedSemester
-                  ? selectedSemester.name
-                  : "No Semester"}
-              </h2>
+    <h2>
+      {selectedSemester
+        ? selectedSemester.name
+        : "No Semester"}
+    </h2>
 
-            </div>
+    {selectedSemester && (
+      <div className="semester-info">
 
-            {selectedSemester && (
-              <div className="semester-actions">
-
-                {!selectedSemester.completed && (
-                  <button
-                    className="secondary-button"
-                    onClick={() =>
-                      setShowCompleteSemester(
-                        true
-                      )
-                    }
-                  >
-                    ✓ Complete Semester
-                  </button>
-                )}
-
-                <button
-                  className="delete-button"
-                  onClick={() =>
-                    deleteSemester(
-                      selectedSemester.id
-                    )
-                  }
-                >
-                  Delete Semester
-                </button>
-
-              </div>
-            )}
-
-          </div>
-
-          {selectedSemester && (
-            <div className="semester-info">
-
-              <span>
-                📅 Started{" "}
-                {new Date(
-                  `${selectedSemester.startDate}T00:00:00`
-                ).toLocaleDateString(
-                  "en-IN",
-                  {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  }
-                )}
-              </span>
-
-              {selectedSemester.completed &&
-                selectedSemester.endDate && (
-                  <span>
-                    → Finished{" "}
-                    {new Date(
-                      `${selectedSemester.endDate}T00:00:00`
-                    ).toLocaleDateString(
-                      "en-IN",
-                      {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric",
-                      }
-                    )}
-                  </span>
-                )}
-
-            </div>
+        <span>
+          📅 Started{" "}
+          {new Date(
+            `${selectedSemester.startDate}T00:00:00`
+          ).toLocaleDateString(
+            "en-IN",
+            {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            }
           )}
+        </span>
+
+        {selectedSemester.completed &&
+          selectedSemester.endDate && (
+            <span>
+              → Finished{" "}
+              {new Date(
+                `${selectedSemester.endDate}T00:00:00`
+              ).toLocaleDateString(
+                "en-IN",
+                {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                }
+              )}
+            </span>
+          )}
+
+      </div>
+    )}
+
+  </div>
+
+  
+
+</div>
 
           {semesters.length > 0 && (
             <div className="semester-selector">
@@ -2146,52 +2118,45 @@ const changeClassesForDate = async (
         {selectedSemester && (
           <>
 
-            {/* WELCOME */}
+            {/* DASHBOARD HEADER */}
 
-            <section className="welcome">
+<section className="dashboard-heading">
 
-              <p className="eyebrow">
-                YOUR DASHBOARD
-              </p>
+  <h1>
+    Bunkly
+  </h1>
 
-              <h1>
-                Attendance Dashboard
-              </h1>
+  <p>
+    Your attendance, simplified.
+  </p>
 
-              <p className="subtitle">
-                {studentName
-                  ? `Welcome back, ${studentName}.`
-                  : "Track your attendance and know when you can bunk."}
-              </p>
+  {(collegeName ||
+    branchName ||
+    studentYear) && (
+    <div className="profile-summary">
 
-              {(collegeName ||
-                branchName ||
-                studentYear) && (
-                <div className="profile-summary">
+      {collegeName && (
+        <span>
+          🎓 {collegeName}
+        </span>
+      )}
 
-                  {collegeName && (
-                    <span>
-                      🎓 {collegeName}
-                    </span>
-                  )}
+      {branchName && (
+        <span>
+          💻 {branchName}
+        </span>
+      )}
 
-                  {branchName && (
-                    <span>
-                      💻 {branchName}
-                    </span>
-                  )}
+      {studentYear && (
+        <span>
+          📚 {studentYear}
+        </span>
+      )}
 
-                  {studentYear && (
-                    <span>
-                      📚 {studentYear}
-                    </span>
-                  )}
+    </div>
+  )}
 
-                </div>
-              )}
-
-            </section>
-
+</section>
             {/* OVERVIEW */}
 
             <section className="overview">

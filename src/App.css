@@ -2084,3 +2084,212 @@ label + label {
     display: none !important;
   }
 }
+
+.dashboard-heading {
+  margin-bottom: 24px;
+}
+
+.dashboard-heading h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.dashboard-heading p {
+  margin: 5px 0 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.semester-compact-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.semester-title h2 {
+  margin: 4px 0 0;
+}
+
+.semester-title .semester-info {
+  margin-top: 6px;
+}
+
+.semester-status {
+  flex-shrink: 0;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.status-badge.active {
+  background: #e8f7ee;
+  color: #16803c;
+}
+
+.status-badge.completed {
+  background: #f1f3f5;
+  color: #666;
+}
+.semester-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.semester-actions .secondary-button,
+.semester-actions .delete-button {
+  padding: 7px 10px;
+  font-size: 12px;
+}
+
+/* -----------------------------
+   SUBJECT CARDS
+----------------------------- */
+
+.subject {
+  padding: 18px;
+  border-radius: 16px;
+}
+
+.subject-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.subject-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.subject-icon {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: #f3f4f6;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.subject-info strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.subject-info span {
+  display: block;
+  margin-top: 3px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.subject-percentage {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.subject-percentage strong {
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.subject-percentage span {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.subject-progress {
+  margin-top: 16px;
+}
+
+.subject-progress-track {
+  width: 100%;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e5e7eb;
+}
+
+.subject-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.25s ease;
+}
+
+.subject-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.subject-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.subject-status.safe {
+  background: #e8f7ee;
+  color: #16803c;
+}
+
+.subject-status.warning {
+  background: #fff7df;
+  color: #a16207;
+}
+
+.subject-status.danger {
+  background: #feecec;
+  color: #c62828;
+}
+
+.subject-status.neutral {
+  background: #f1f3f5;
+  color: #6b7280;
+}
+
+.subject-bunk-info {
+  font-size: 12px;
+  font-weight: 650;
+  color: #6b7280;
+  text-align: right;
+}
+
+.subject-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.subject-actions button {
+  padding: 7px 12px;
+  font-size: 12px;
+}
