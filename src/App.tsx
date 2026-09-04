@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Auth from "./Auth"
 import { supabase } from "./supabase"
 import type {
@@ -161,9 +161,11 @@ function App() {
   // =========================================================
   // ATTENDANCE STATE
   // =========================================================
+const [attendanceRecords, setAttendanceRecords] =
+  useState<AttendanceRecord[]>([])
 
-  const [attendanceRecords, setAttendanceRecords] =
-    useState<AttendanceRecord[]>([])
+const attendanceUpdateLock =
+  useRef<Set<string>>(new Set())
 
   // =========================================================
   // CLASS COUNTS
@@ -190,6 +192,21 @@ function App() {
   const [bunkSubjectId, setBunkSubjectId] =
     useState("")
 
+    // =========================================================
+// APP PAGE
+// =========================================================
+
+type AppPage =
+  | "dashboard"
+  | "attendance"
+  | "subjects"
+  | "analytics"
+  | "semesters"
+
+const [currentPage, setCurrentPage] =
+  useState<AppPage>("dashboard")
+
+    
   // =========================================================
   // LOAD PROFILE
   // =========================================================
@@ -448,21 +465,18 @@ function App() {
       // SUBJECTS
       // -------------------------
 
-      const {
-        data: subjectData,
-        error: subjectError,
-      } = await supabase
-        .from("subjects")
-        .select("*")
-        .eq(
-          "semester_id",
-          semesterData?.length
-            ? semesterData.map(
-                (item) => item.id
-              )
-            : ""
-        )
-
+     const {
+  data: subjectData,
+  error: subjectError,
+} = await supabase
+  .from("subjects")
+  .select("*")
+  .in(
+    "semester_id",
+    (semesterData ?? []).map(
+      (item) => item.id
+    )
+  )
       if (subjectError) {
         console.error(
           "Error loading subjects:",
@@ -1284,17 +1298,27 @@ const { error } =
   // =========================================================
 
   const updateClassAttendance = async (
-    subjectId: string,
-    classNumber: number,
-    status: AttendanceStatus
-  ) => {
-    if (
-  !selectedSemester ||
-  selectedSemester.completed
-) {
-  return
-}
+  subjectId: string,
+  classNumber: number,
+  status: AttendanceStatus
+) => {
+  if (
+    !selectedSemester ||
+    selectedSemester.completed
+  ) {
+    return
+  }
 
+  const lockKey =
+    `${selectedSemester.id}_${selectedDate}_${subjectId}_${classNumber}`
+
+  if (attendanceUpdateLock.current.has(lockKey)) {
+    return
+  }
+
+  attendanceUpdateLock.current.add(lockKey)
+
+  try {
     const existingRecord =
       attendanceRecords.find(
         (record) =>
@@ -1398,14 +1422,16 @@ const { error } =
 
       return
     }
-
     setAttendanceRecords(
       (records) => [
         ...records,
         newRecord,
       ]
     )
+  } finally {
+    attendanceUpdateLock.current.delete(lockKey)
   }
+}
 // =========================================================
 // CHANGE NUMBER OF CLASSES
 // =========================================================
@@ -1903,6 +1929,81 @@ const changeClassesForDate = async (
 
         </div>
 
+        <nav className="main-nav">
+
+  <button
+    type="button"
+    className={
+      currentPage === "dashboard"
+        ? "nav-item active"
+        : "nav-item"
+    }
+    onClick={() =>
+      setCurrentPage("dashboard")
+    }
+  >
+    🏠 Dashboard
+  </button>
+
+  <button
+    type="button"
+    className={
+      currentPage === "attendance"
+        ? "nav-item active"
+        : "nav-item"
+    }
+    onClick={() =>
+      setCurrentPage("attendance")
+    }
+  >
+    📅 Attendance
+  </button>
+
+  <button
+    type="button"
+    className={
+      currentPage === "subjects"
+        ? "nav-item active"
+        : "nav-item"
+    }
+    onClick={() =>
+      setCurrentPage("subjects")
+    }
+  >
+    📚 Subjects
+  </button>
+
+  <button
+    type="button"
+    className={
+      currentPage === "analytics"
+        ? "nav-item active"
+        : "nav-item"
+    }
+    onClick={() =>
+      setCurrentPage("analytics")
+    }
+  >
+    📊 Analytics
+  </button>
+
+  <button
+    type="button"
+    className={
+      currentPage === "semesters"
+        ? "nav-item active"
+        : "nav-item"
+    }
+    onClick={() =>
+      setCurrentPage("semesters")
+    }
+  >
+    🎓 Semesters
+  </button>
+
+</nav>
+
+
         <div className="header-right">
 
           <button
@@ -1953,11 +2054,15 @@ const changeClassesForDate = async (
 
       {/* MAIN */}
 
-      <main className="dashboard">
+      <main className={`dashboard page-${currentPage}`}>
+        
+  
 
-        {/* SEMESTER */}
+   
+  
+    {/* SEMESTER */}
 
-        <section className="semester-section">
+    <section className="semester-section current-semester-page-section">
 
           <div className="semester-compact-header">
 
@@ -2010,13 +2115,43 @@ const changeClassesForDate = async (
       </div>
     )}
 
-  </div>
+    </div>
 
-  
+  {selectedSemester && (
+    <div className="semester-actions">
+
+      {!selectedSemester.completed && (
+        <button
+          type="button"
+          className="secondary-button"
+          onClick={() => {
+            setSemesterEndDate(today)
+            setShowCompleteSemester(true)
+          }}
+        >
+          ✓ Complete Semester
+        </button>
+      )}
+
+      <button
+        type="button"
+        className="delete-button"
+        onClick={() =>
+          deleteSemester(
+            selectedSemester.id
+          )
+        }
+      >
+        🗑 Delete Semester
+      </button>
+
+    </div>
+  )}
 
 </div>
 
-          {semesters.length > 0 && (
+          {semesters.length > 0 && ( 
+            
             <div className="semester-selector">
 
               <label>
@@ -2114,52 +2249,237 @@ const changeClassesForDate = async (
           )}
 
         </section>
+{selectedSemester && (
+  <>
 
-        {selectedSemester && (
-          <>
-
-            {/* DASHBOARD HEADER */}
-
-<section className="dashboard-heading">
-
-  <h1>
-    Bunkly
-  </h1>
-
-  <p>
-    Your attendance, simplified.
-  </p>
-
-  {(collegeName ||
-    branchName ||
-    studentYear) && (
-    <div className="profile-summary">
-
-      {collegeName && (
-        <span>
-          🎓 {collegeName}
-        </span>
-      )}
-
-      {branchName && (
-        <span>
-          💻 {branchName}
-        </span>
-      )}
-
-      {studentYear && (
-        <span>
-          📚 {studentYear}
-        </span>
-      )}
-
+{/* DAILY ATTENDANCE */}
+    <section
+      className="section attendance-page-section"
+      id="attendance-section"
+    >
+  <div className="section-header">
+    <div>
+      <p className="eyebrow">ATTENDANCE HISTORY</p>
+      <h2>Daily Attendance</h2>
     </div>
-  )}
+  </div>
 
+  <div className="today-summary">
+    <div>
+      <p className="eyebrow">TODAY'S ATTENDANCE</p>
+
+      <h3>
+        {todayAttendedClasses} / {todayTotalClasses} classes attended
+      </h3>
+
+      <div className="today-status">
+        <span>
+          ✅ Present: {todayAttendedClasses}
+        </span>
+
+        <span>
+          ❌ Absent: {todayAbsentClasses}
+        </span>
+      </div>
+    </div>
+
+    <div className="today-summary-right">
+      <strong>
+        {todayTotalClasses === 0
+          ? "—"
+          : `${todayAttendance.toFixed(1)}%`}
+      </strong>
+
+      <span>
+        {todayTotalClasses === 0
+          ? "No classes recorded"
+          : "Attendance today"}
+      </span>
+    </div>
+  </div>
+
+  <div className="date-navigation">
+    <button
+      type="button"
+      className="date-button"
+      onClick={() => changeDate(-1)}
+      disabled={
+        selectedDate === selectedSemester.startDate
+      }
+    >
+      ← Previous Day
+    </button>
+
+    <div className="selected-date">
+      <span>📅</span>
+
+      <strong>
+        {formattedSelectedDate}
+      </strong>
+    </div>
+
+    <button
+      type="button"
+      className="date-button"
+      disabled={
+        selectedDate === today ||
+        selectedSemester.completed
+      }
+      onClick={() => changeDate(1)}
+    >
+      Next Day →
+    </button>
+  </div>
+
+  <div className="today-list">
+    {semesterSubjects.length === 0 ? (
+      <div className="empty-state">
+        <p>Add subjects first.</p>
+      </div>
+    ) : (
+      semesterSubjects.map((subject) => {
+        const semesterDateKey =
+          `${selectedSemester.id}_${selectedDate}`
+
+        const numberOfClasses =
+          classesToday[semesterDateKey]?.[subject.id] ?? 1
+
+        const dateRecords =
+          semesterAttendance.filter(
+            (record) =>
+              record.subjectId === subject.id &&
+              record.date === selectedDate
+          )
+
+        const attendedClasses =
+          dateRecords.filter(
+            (record) =>
+              record.status === "present"
+          ).length
+
+        return (
+          <div
+            className="today-item"
+            key={subject.id}
+          >
+            <div className="today-subject-info">
+              <strong>
+                {subject.name}
+              </strong>
+
+              <span>
+                {attendedClasses} / {numberOfClasses} attended
+              </span>
+            </div>
+
+            <div className="class-counter">
+              <button
+                type="button"
+                onClick={() =>
+                  changeClassesForDate(
+                    subject.id,
+                    numberOfClasses - 1
+                  )
+                }
+                disabled={
+                  numberOfClasses <= 1 ||
+                  selectedSemester.completed
+                }
+              >
+                −
+              </button>
+
+              <strong>
+                {numberOfClasses}
+              </strong>
+
+              <button
+                type="button"
+                onClick={() =>
+                  changeClassesForDate(
+                    subject.id,
+                    numberOfClasses + 1
+                  )
+                }
+                disabled={
+                  selectedSemester.completed
+                }
+              >
+                +
+              </button>
+            </div>
+
+            <div className="class-list">
+              {Array.from({
+                length: numberOfClasses,
+              }).map((_, index) => {
+                const classNumber =
+                  index + 1
+
+                const record =
+                  semesterAttendance.find(
+                    (item) =>
+                      item.subjectId ===
+                        subject.id &&
+                      item.date ===
+                        selectedDate &&
+                      item.classNumber ===
+                        classNumber
+                  )
+
+                const isPresent =
+                  record?.status ===
+                  "present"
+
+                return (
+                  <label
+                    className="class-checkbox"
+                    key={classNumber}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={isPresent}
+                      disabled={
+                        selectedSemester.completed
+                      }
+                      onChange={(event) => {
+                        updateClassAttendance(
+                          subject.id,
+                          classNumber,
+                          event.target.checked
+                            ? "present"
+                            : "absent"
+                        )
+                      }}
+                    />
+
+                    <span>
+                      Class {classNumber}
+                    </span>
+
+                    <span className="class-status">
+                      {isPresent
+                        ? "Present"
+                        : "Absent"}
+                    </span>
+                  </label>
+                )
+              })}
+            </div>
+          </div>
+        )
+      })
+    )}
+  </div>
 </section>
+
+
+           
+
+
             {/* OVERVIEW */}
 
-            <section className="overview">
+            <section className="overview analytics-page-section">
 
               <div className="attendance-card">
 
@@ -2229,51 +2549,10 @@ const changeClassesForDate = async (
 
             </section>
 
-            {/* CAN I BUNK */}
-
-            <section className="bunk-section">
-
-              <div>
-
-                <p className="eyebrow">
-                  SIGNATURE FEATURE
-                </p>
-
-                <h2>
-                  Can I Bunk? 😎
-                </h2>
-
-                <p>
-                  Check whether you can
-                  safely miss your next
-                  class.
-                </p>
-
-              </div>
-
-              <button
-                className="bunk-button"
-                disabled={
-                  selectedSemester.completed ||
-                  semesterSubjects.length ===
-                    0
-                }
-                onClick={() => {
-                  setBunkSubjectId(
-                    semesterSubjects[0]?.id ??
-                      ""
-                  )
-                  setShowBunkCheck(true)
-                }}
-              >
-                Check Now →
-              </button>
-
-            </section>
-
             {/* SUBJECTS */}
 
-            <section className="section">
+            {/* SUBJECTS */}
+<section className="section subjects-page-section">
 
               <div className="section-header">
 
@@ -2616,332 +2895,49 @@ const changeClassesForDate = async (
 
             </section>
 
-            {/* DAILY ATTENDANCE */}
+            {/* CAN I BUNK */}
 
-            <section className="section">
+            <section className="bunk-section dashboard-bunk-feature">
 
-              <div className="section-header">
+              <div>
 
-                <div>
+                <p className="eyebrow">
+                  SIGNATURE FEATURE
+                </p>
 
-                  <p className="eyebrow">
-                    ATTENDANCE HISTORY
-                  </p>
+                <h2>
+                  Can I Bunk? 😎
+                </h2>
 
-                  <h2>
-                    Daily Attendance
-                  </h2>
-
-                </div>
+                <p>
+                  Check whether you can
+                  safely miss your next
+                  class.
+                </p>
 
               </div>
 
-              <div className="today-summary">
-
-                <div>
-
-                  <p className="eyebrow">
-                    TODAY'S ATTENDANCE
-                  </p>
-
-                  <h3>
-                    {todayAttendedClasses}{" "}
-                    /{" "}
-                    {todayTotalClasses}{" "}
-                    classes attended
-                  </h3>
-
-                  <div className="today-status">
-
-                    <span>
-                      ✅ Present:{" "}
-                      {todayAttendedClasses}
-                    </span>
-
-                    <span>
-                      ❌ Absent:{" "}
-                      {todayAbsentClasses}
-                    </span>
-
-                  </div>
-
-                </div>
-
-                <div className="today-summary-right">
-
-                  <strong>
-                    {todayTotalClasses ===
+              <button
+                className="bunk-button"
+                disabled={
+                  selectedSemester.completed ||
+                  semesterSubjects.length ===
                     0
-                      ? "—"
-                      : `${todayAttendance.toFixed(
-                          1
-                        )}%`}
-                  </strong>
-
-                  <span>
-                    {todayTotalClasses ===
-                    0
-                      ? "No classes recorded"
-                      : "Attendance today"}
-                  </span>
-
-                </div>
-
-              </div>
-
-              <div className="date-navigation">
-
-                <button
-                  type="button"
-                  className="date-button"
-                  onClick={() =>
-                    changeDate(-1)
-                  }
-                  disabled={
-                    selectedDate ===
-                    selectedSemester.startDate
-                  }
-                >
-                  ← Previous Day
-                </button>
-
-                <div className="selected-date">
-
-                  <span>
-                    📅
-                  </span>
-
-                  <strong>
-                    {
-                      formattedSelectedDate
-                    }
-                  </strong>
-
-                </div>
-
-                <button
-                  type="button"
-                  className="date-button"
-                  disabled={
-                    selectedDate ===
-                      today ||
-                    selectedSemester.completed
-                  }
-                  onClick={() =>
-                    changeDate(1)
-                  }
-                >
-                  Next Day →
-                </button>
-
-              </div>
-
-              <div className="today-list">
-
-                {semesterSubjects.length ===
-                0 ? (
-                  <div className="empty-state">
-
-                    <p>
-                      Add subjects first.
-                    </p>
-
-                  </div>
-                ) : (
-                  semesterSubjects.map(
-                    (subject) => {
-
-                      const semesterDateKey =
-                        `${selectedSemester.id}_${selectedDate}`
-
-                      const numberOfClasses =
-                        classesToday[
-                          semesterDateKey
-                        ]?.[
-                          subject.id
-                        ] ?? 1
-
-                      const dateRecords =
-                        semesterAttendance.filter(
-                          (record) =>
-                            record.subjectId ===
-                              subject.id &&
-                            record.date ===
-                              selectedDate
-                        )
-
-                      const attendedClasses =
-                        dateRecords.filter(
-                          (record) =>
-                            record.status ===
-                            "present"
-                        ).length
-
-                      return (
-                        <div
-                          className="today-item"
-                          key={
-                            subject.id
-                          }
-                        >
-
-                          <div className="today-subject-info">
-
-                            <strong>
-                              {
-                                subject.name
-                              }
-                            </strong>
-
-                            <span>
-                              {
-                                attendedClasses
-                              }{" "}
-                              /{" "}
-                              {
-                                numberOfClasses
-                              }{" "}
-                              attended
-                            </span>
-
-                          </div>
-
-                          <div className="class-counter">
-
-                            <button
-                              type="button"
-                              onClick={() =>
-                                changeClassesForDate(
-                                  subject.id,
-                                  numberOfClasses -
-                                    1
-                                )
-                              }
-                              disabled={
-                                numberOfClasses <=
-                                  1 ||
-                                selectedSemester.completed
-                              }
-                            >
-                              −
-                            </button>
-
-                            <strong>
-                              {
-                                numberOfClasses
-                              }
-                            </strong>
-
-                            <button
-                              type="button"
-                              onClick={() =>
-                                changeClassesForDate(
-                                  subject.id,
-                                  numberOfClasses +
-                                    1
-                                )
-                              }
-                              disabled={
-                                selectedSemester.completed
-                              }
-                            >
-                              +
-                            </button>
-
-                          </div>
-
-                          <div className="class-list">
-
-                            {Array.from({
-                              length:
-                                numberOfClasses,
-                            }).map(
-                              (
-                                _,
-                                index
-                              ) => {
-
-                                const classNumber =
-                                  index +
-                                  1
-
-                                const record =
-                                  semesterAttendance.find(
-                                    (
-                                      item
-                                    ) =>
-                                      item.subjectId ===
-                                        subject.id &&
-                                      item.date ===
-                                        selectedDate &&
-                                      item.classNumber ===
-                                        classNumber
-                                  )
-
-                                const isPresent =
-                                  record?.status ===
-                                  "present"
-
-                                return (
-                                  <label
-                                    className="class-checkbox"
-                                    key={
-                                      classNumber
-                                    }
-                                  >
-
-                                    <input
-                                      type="checkbox"
-                                      checked={
-                                        isPresent
-                                      }
-                                      disabled={
-                                        selectedSemester.completed
-                                      }
-                                      onChange={(
-                                        event
-                                      ) => {
-                                        updateClassAttendance(
-                                          subject.id,
-                                          classNumber,
-                                          event
-                                            .target
-                                            .checked
-                                            ? "present"
-                                            : "absent"
-                                        )
-                                      }}
-                                    />
-
-                                    <span>
-                                      Class{" "}
-                                      {
-                                        classNumber
-                                      }
-                                    </span>
-
-                                    <span className="class-status">
-                                      {isPresent
-                                        ? "Present"
-                                        : "Absent"}
-                                    </span>
-
-                                  </label>
-                                )
-                              }
-                            )}
-
-                          </div>
-
-                        </div>
-                      )
-                    }
+                }
+                onClick={() => {
+                  setBunkSubjectId(
+                    semesterSubjects[0]?.id ??
+                      ""
                   )
-                )}
-
-              </div>
+                  setShowBunkCheck(true)
+                }}
+              >
+                Check Now →
+              </button>
 
             </section>
+
+            
 
           </>
         )}
@@ -2949,7 +2945,7 @@ const changeClassesForDate = async (
         {/* SEMESTER HISTORY */}
 
         {semesters.length > 0 && (
-          <section className="section semester-history">
+          <section className="section semesters-page-section">
 
             <div className="section-header">
 
@@ -4111,6 +4107,7 @@ const changeClassesForDate = async (
           </div>
         )}
 
+      
       </main>
 
     </div>

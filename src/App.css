@@ -1,107 +1,91 @@
 /* =========================================================
    BUNKLY — PROFESSIONAL UI
    ========================================================= */
+/* =========================================================
+   BUNKLY — PROFESSIONAL UI
+   ========================================================= */
+/* LIGHT MODE */
 
 :root {
-  font-family:
-    Inter,
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
 
-  color: #111827;
-  background: #f6f7fb;
+  --bg: #f4f6ff;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-
-  --bg: #f6f7fb;
   --surface: #ffffff;
-  --surface-soft: #f8fafc;
-  --surface-hover: #f1f5f9;
+  --surface-soft: #f8f9ff;
+  --surface-hover: #eef1ff;
 
   --text: #111827;
-  --text-secondary: #4b5563;
-  --text-muted: #6b7280;
+  --text-secondary: #4b5875;
+  --text-muted: #71809c;
 
-  --border: #e5e7eb;
-  --border-strong: #d1d5db;
+  --border: #dfe4f2;
+  --border-strong: #c7d0e5;
 
-  --primary: #111827;
-  --primary-hover: #1f2937;
+  --primary: #6d5dfc;
+  --primary-hover: #5847ee;
   --primary-text: #ffffff;
 
-  --danger: #dc2626;
-  --danger-bg: #fef2f2;
+  --danger: #e54868;
+  --danger-bg: #fff0f3;
 
-  --success: #15803d;
-  --success-bg: #ecfdf3;
+  --success: #16a673;
+  --success-bg: #e9fbf4;
 
-  --warning: #b45309;
-  --warning-bg: #fffbeb;
+  --warning: #d99a00;
+  --warning-bg: #fff8df;
 
   --shadow-sm:
-    0 2px 8px rgba(15, 23, 42, 0.05);
+    0 2px 8px rgba(48, 58, 95, 0.08);
 
   --shadow-md:
-    0 10px 30px rgba(15, 23, 42, 0.08);
+    0 10px 30px rgba(48, 58, 95, 0.12);
 
   --shadow-lg:
-    0 20px 50px rgba(15, 23, 42, 0.14);
-
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 20px;
-  --radius-xl: 24px;
+    0 20px 50px rgba(48, 58, 95, 0.16);
 }
-
 /* =========================================================
    DARK MODE
    ========================================================= */
 
+ /* DARK MODE */
+
 html[data-theme-active="dark"] {
-  color: #f8fafc;
-  background: #0b1120;
 
-  --bg: #0b1120;
-  --surface: #111827;
-  --surface-soft: #172033;
-  --surface-hover: #1e293b;
+  --bg: #070b16;
 
-  --text: #f8fafc;
-  --text-secondary: #cbd5e1;
-  --text-muted: #94a3b8;
+  --surface: #0f1628;
+  --surface-soft: #151f35;
+  --surface-hover: #1c2943;
 
-  --border: #273449;
-  --border-strong: #334155;
+  --text: #ffffff;
+  --text-secondary: #d7def0;
+  --text-muted: #9aa8c2;
 
-  --primary: #f8fafc;
-  --primary-hover: #e2e8f0;
-  --primary-text: #0f172a;
+  --border: #293957;
+  --border-strong: #3b4d70;
 
-  --danger: #f87171;
-  --danger-bg: #2a1719;
+  --primary: #9b8cff;
+  --primary-hover: #8473ff;
+  --primary-text: #ffffff;
 
-  --success: #4ade80;
-  --success-bg: #10251a;
+  --danger: #ff6f91;
+  --danger-bg: #351827;
 
-  --warning: #fbbf24;
-  --warning-bg: #2a2110;
+  --success: #45e0a2;
+  --success-bg: #123a2c;
+
+  --warning: #ffd166;
+  --warning-bg: #3b3014;
 
   --shadow-sm:
-    0 2px 10px rgba(0, 0, 0, 0.25);
+    0 2px 10px rgba(0, 0, 0, 0.35);
 
   --shadow-md:
-    0 12px 35px rgba(0, 0, 0, 0.3);
+    0 12px 32px rgba(0, 0, 0, 0.45);
 
   --shadow-lg:
-    0 25px 60px rgba(0, 0, 0, 0.45);
+    0 24px 60px rgba(0, 0, 0, 0.55);
 }
-
 /* =========================================================
    RESET
    ========================================================= */
@@ -2292,4 +2276,798 @@ label + label {
 .subject-actions button {
   padding: 7px 12px;
   font-size: 12px;
+}
+
+/* TOP HEADER — SKY BLUE */
+
+.app-header,
+.top-header,
+.header {
+  background: linear-gradient(
+    135deg,
+    #38bdf8,
+    #60a5fa
+  ) !important;
+
+  border-color: #38bdf8 !important;
+  color: #ffffff;
+}
+
+.app-header *,
+.top-header *,
+.header * {
+  color: #ffffff;
+}
+
+/* =========================================================
+   TOP HEADER — SKY BLUE
+   ========================================================= */
+
+header {
+  background: linear-gradient(
+    135deg,
+    #38bdf8 0%,
+    #60a5fa 100%
+  ) !important;
+
+  border-color: #38bdf8 !important;
+}
+
+header * {
+  color: #ffffff;
+}
+
+
+
+/* =========================================================
+   BUNKLY — PAGE NAVIGATION
+   ========================================================= */
+
+.page-attendance .current-semester-page-section,
+.page-attendance .analytics-page-section,
+.page-attendance .subjects-page-section,
+.page-attendance .bunk-section,
+.page-attendance .semesters-page-section {
+  display: none;
+}
+
+.page-subjects .current-semester-page-section,
+.page-subjects .attendance-page-section,
+.page-subjects .analytics-page-section,
+.page-subjects .bunk-section,
+.page-subjects .semesters-page-section {
+  display: none;
+}
+
+.page-analytics .current-semester-page-section,
+.page-analytics .attendance-page-section,
+.page-analytics .subjects-page-section,
+.page-analytics .bunk-section,
+.page-analytics .semesters-page-section {
+  display: none;
+}
+
+.page-semesters .current-semester-page-section,
+.page-semesters .attendance-page-section,
+.page-semesters .analytics-page-section,
+.page-semesters .subjects-page-section,
+.page-semesters .bunk-section {
+  display: none;
+}
+
+/* =========================================================
+   BUNKLY — PAGE LAYOUT
+   ========================================================= */
+
+.dashboard {
+  width: 100%;
+}
+
+.dashboard.page-attendance,
+.dashboard.page-subjects,
+.dashboard.page-analytics,
+.dashboard.page-semesters {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.dashboard.page-attendance .attendance-page-section,
+.dashboard.page-subjects .subjects-page-section,
+.dashboard.page-analytics .analytics-page-section,
+.dashboard.page-semesters .semesters-page-section {
+  width: 100%;
+  margin-top: 0;
+}
+
+/* =========================================================
+   BUNKLY — CLEAN DASHBOARD
+   ========================================================= */
+/* =========================================================
+   BUNKLY — DASHBOARD VISIBILITY
+   ========================================================= */
+
+.dashboard.page-dashboard
+  .attendance-page-section,
+.dashboard.page-dashboard
+  .subjects-page-section,
+.dashboard.page-dashboard
+  .semesters-page-section {
+  display: none;
+}
+
+/* =========================================================
+   BUNKLY — DASHBOARD POLISH
+   ========================================================= */
+
+.dashboard.page-dashboard {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
+
+.dashboard.page-dashboard .current-semester-page-section {
+  margin-bottom: 24px;
+}
+
+.dashboard.page-dashboard .semester-section {
+  border-radius: 24px;
+  padding: 26px;
+  background: linear-gradient(
+    135deg,
+    #38bdf8 0%,
+    #60a5fa 50%,
+    #818cf8 100%
+  );
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 18px 45px rgba(59, 130, 246, 0.22);
+}
+
+.dashboard.page-dashboard .semester-section .eyebrow,
+.dashboard.page-dashboard .semester-section h2,
+.dashboard.page-dashboard .semester-section span,
+.dashboard.page-dashboard .semester-section label {
+  color: #ffffff;
+}
+
+.dashboard.page-dashboard .semester-section select {
+  background: rgba(255, 255, 255, 0.95);
+  color: #172033;
+  border: none;
+}
+
+.dashboard.page-dashboard .semester-actions {
+  gap: 10px;
+}
+
+.dashboard.page-dashboard .semester-actions button {
+  border-radius: 12px;
+}
+
+.dashboard.page-dashboard .bunk-section {
+  margin-top: 24px;
+  border-radius: 24px;
+  padding: 28px;
+  background: linear-gradient(
+    135deg,
+    #fff7ed 0%,
+    #ffedd5 100%
+  );
+  border: 1px solid #fed7aa;
+  box-shadow: 0 14px 35px rgba(249, 115, 22, 0.12);
+}
+
+.dashboard.page-dashboard .bunk-section h2 {
+  color: #c2410c;
+}
+
+/* =========================================================
+   BUNKLY — ATTENDANCE PAGE POLISH
+   ========================================================= */
+
+.dashboard.page-attendance {
+  padding-bottom: 40px;
+}
+
+.dashboard.page-attendance .attendance-page-section {
+  border-radius: 24px;
+  padding: 28px;
+  background: var(--card-bg, #ffffff);
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.08);
+}
+
+.dashboard.page-attendance .today-summary {
+  border-radius: 20px;
+  padding: 22px;
+  background: linear-gradient(
+    135deg,
+    #e0f2fe 0%,
+    #dbeafe 100%
+  );
+  border: 1px solid #bae6fd;
+}
+
+.dashboard.page-attendance .today-summary-right strong {
+  font-size: 32px;
+}
+
+.dashboard.page-attendance .today-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.dashboard.page-attendance .today-status span {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #ffffff;
+  font-weight: 700;
+}
+
+.dashboard.page-attendance .date-navigation {
+  margin: 22px 0;
+}
+
+.dashboard.page-attendance .date-button {
+  border-radius: 12px;
+  font-weight: 700;
+  transition: 0.2s ease;
+}
+
+.dashboard.page-attendance .date-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.dashboard.page-attendance .today-item {
+  border-radius: 18px;
+  border: 1px solid #e5e7eb;
+  padding: 18px;
+  margin-bottom: 12px;
+  background: #ffffff;
+  transition: 0.2s ease;
+}
+
+.dashboard.page-attendance .today-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+/* =========================================================
+   BUNKLY — SUBJECTS PAGE POLISH
+   ========================================================= */
+
+.dashboard.page-subjects {
+  padding-bottom: 40px;
+}
+
+.dashboard.page-subjects .subjects-page-section {
+  border-radius: 24px;
+  padding: 28px;
+  background: var(--card-bg, #ffffff);
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.08);
+}
+
+.dashboard.page-subjects .subjects-page-section .section-header {
+  margin-bottom: 22px;
+}
+
+.dashboard.page-subjects .subject-card {
+  border-radius: 18px;
+  padding: 18px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  transition: 0.2s ease;
+}
+
+.dashboard.page-subjects .subject-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.dashboard.page-subjects .subjects-grid {
+  gap: 16px;
+}
+
+.dashboard.page-subjects button {
+  border-radius: 12px;
+}
+
+/* =========================================================
+   BUNKLY — ANALYTICS PAGE POLISH
+   ========================================================= */
+
+.dashboard.page-analytics {
+  padding-bottom: 40px;
+}
+
+.dashboard.page-analytics .analytics-page-section {
+  border-radius: 24px;
+  padding: 28px;
+  background: var(--card-bg, #ffffff);
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.08);
+}
+
+.dashboard.page-analytics .attendance-card,
+.dashboard.page-analytics .bunk-card,
+.dashboard.page-analytics .shortage-card {
+  border-radius: 20px;
+  padding: 22px;
+  transition: 0.2s ease;
+}
+
+.dashboard.page-analytics .attendance-card:hover,
+.dashboard.page-analytics .bunk-card:hover,
+.dashboard.page-analytics .shortage-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.10);
+}
+
+.dashboard.page-analytics .attendance-card {
+  background: linear-gradient(
+    135deg,
+    #e0f2fe,
+    #dbeafe
+  );
+  border: 1px solid #bae6fd;
+}
+
+.dashboard.page-analytics .bunk-card {
+  background: linear-gradient(
+    135deg,
+    #ecfdf5,
+    #d1fae5
+  );
+  border: 1px solid #a7f3d0;
+}
+
+.dashboard.page-analytics .shortage-card {
+  background: linear-gradient(
+    135deg,
+    #fff7ed,
+    #ffedd5
+  );
+  border: 1px solid #fed7aa;
+}
+
+/* =========================================================
+   BUNKLY — SEMESTERS PAGE POLISH
+   ========================================================= */
+
+.dashboard.page-semesters {
+  padding-bottom: 40px;
+}
+
+.dashboard.page-semesters .semesters-page-section {
+  border-radius: 24px;
+  padding: 28px;
+  background: var(--card-bg, #ffffff);
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.08);
+}
+
+.dashboard.page-semesters .semester-history-list {
+  display: grid;
+  gap: 16px;
+}
+
+.dashboard.page-semesters .semester-history-card {
+  border-radius: 20px;
+  padding: 20px;
+  background: linear-gradient(
+    135deg,
+    #f0f9ff,
+    #eef2ff
+  );
+  border: 1px solid #dbeafe;
+  transition: 0.2s ease;
+}
+
+.dashboard.page-semesters .semester-history-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.10);
+}
+
+.dashboard.page-semesters .semester-history-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dashboard.page-semesters .semester-history-title span {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #d1fae5;
+  color: #047857;
+  font-weight: 800;
+}
+
+/* =========================================================
+   BUNKLY — SIGNATURE CAN I BUNK CARD
+   ========================================================= */
+
+.dashboard.page-dashboard .dashboard-bunk-feature {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 24px;
+  padding: 30px;
+  border-radius: 26px;
+  background: linear-gradient(
+    135deg,
+    #7c3aed 0%,
+    #6366f1 50%,
+    #3b82f6 100%
+  );
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 20px 45px rgba(79, 70, 229, 0.25);
+}
+
+.dashboard.page-dashboard .dashboard-bunk-feature::after {
+  content: "😎";
+  position: absolute;
+  right: 25px;
+  bottom: -25px;
+  font-size: 110px;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.dashboard.page-dashboard .dashboard-bunk-feature .eyebrow,
+.dashboard.page-dashboard .dashboard-bunk-feature h2,
+.dashboard.page-dashboard .dashboard-bunk-feature p {
+  color: #ffffff;
+}
+
+.dashboard.page-dashboard .dashboard-bunk-feature h2 {
+  margin: 6px 0 8px;
+  font-size: 28px;
+}
+
+.dashboard.page-dashboard .dashboard-bunk-feature p:not(.eyebrow) {
+  opacity: 0.9;
+}
+
+.dashboard.page-dashboard .dashboard-bunk-feature .bunk-button {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  padding: 13px 20px;
+  border: none;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #4f46e5;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard.page-dashboard .dashboard-bunk-feature .bunk-button:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+}
+
+/* =========================================================
+   BUNKLY — DASHBOARD STATS
+   ========================================================= */
+
+.dashboard.page-dashboard .overview {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.dashboard.page-dashboard .overview > div {
+  min-height: 150px;
+  border-radius: 22px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard.page-dashboard .overview > div:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.10);
+}
+
+.dashboard.page-dashboard .attendance-card {
+  background: linear-gradient(
+    135deg,
+    #e0f2fe,
+    #bae6fd
+  );
+  border: 1px solid #7dd3fc;
+}
+
+.dashboard.page-dashboard .bunk-card {
+  background: linear-gradient(
+    135deg,
+    #ecfdf5,
+    #bbf7d0
+  );
+  border: 1px solid #86efac;
+}
+
+.dashboard.page-dashboard .shortage-card {
+  background: linear-gradient(
+    135deg,
+    #fff7ed,
+    #fed7aa
+  );
+  border: 1px solid #fdba74;
+}
+
+.dashboard.page-dashboard .overview h2 {
+  margin: 8px 0;
+  font-size: 30px;
+  font-weight: 850;
+}
+
+@media (max-width: 700px) {
+  .dashboard.page-dashboard .overview {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard.page-dashboard .overview > div {
+    min-height: 120px;
+  }
+}
+
+/* =========================================================
+   BUNKLY — MOBILE DASHBOARD
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .dashboard.page-dashboard {
+    padding: 12px;
+    padding-bottom: 32px;
+  }
+
+  .dashboard.page-dashboard .semester-section {
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .dashboard.page-dashboard .semester-compact-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .dashboard.page-dashboard .semester-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .dashboard.page-dashboard .semester-actions button {
+    width: 100%;
+  }
+
+  .dashboard.page-dashboard .overview {
+    gap: 12px;
+  }
+
+  .dashboard.page-dashboard .overview > div {
+    min-height: 105px;
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .dashboard.page-dashboard .overview h2 {
+    font-size: 26px;
+  }
+
+  .dashboard.page-dashboard .dashboard-bunk-feature {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 22px;
+    border-radius: 20px;
+  }
+
+  .dashboard.page-dashboard .dashboard-bunk-feature .bunk-button {
+    width: 100%;
+    padding: 14px;
+  }
+
+}
+
+/* =========================================================
+   BUNKLY — NAVIGATION POLISH
+   ========================================================= */
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  backdrop-filter: blur(12px);
+}
+
+.nav-item {
+  border: none;
+  background: transparent;
+  color: #64748b;
+  padding: 10px 14px;
+  border-radius: 11px;
+  font-size: 14px;
+  font-weight: 750;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.nav-item:hover {
+  color: #2563eb;
+  background: #eff6ff;
+  transform: translateY(-1px);
+}
+
+.nav-item.active {
+  color: #ffffff;
+  background: linear-gradient(
+    135deg,
+    #38bdf8,
+    #6366f1
+  );
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.22);
+}
+
+@media (max-width: 800px) {
+
+  .main-nav {
+    gap: 4px;
+    padding: 5px;
+    overflow-x: auto;
+    max-width: 100%;
+    scrollbar-width: none;
+  }
+
+  .main-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-item {
+    flex-shrink: 0;
+    padding: 9px 11px;
+    font-size: 13px;
+  }
+
+}
+
+/* =========================================================
+   BUNKLY — DARK MODE PAGE POLISH
+   ========================================================= */
+
+[data-theme="dark"] .main-nav {
+  background: rgba(15, 23, 42, 0.78);
+  border-color: rgba(148, 163, 184, 0.18);
+}
+
+[data-theme="dark"] .nav-item {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .nav-item:hover {
+  color: #7dd3fc;
+  background: rgba(56, 189, 248, 0.10);
+}
+
+[data-theme="dark"] .nav-item.active {
+  color: #ffffff;
+  background: linear-gradient(
+    135deg,
+    #0284c7,
+    #4f46e5
+  );
+}
+
+[data-theme="dark"] .dashboard.page-dashboard
+  .overview .attendance-card {
+  background: linear-gradient(
+    135deg,
+    #082f49,
+    #0c4a6e
+  );
+  border-color: #0369a1;
+}
+
+[data-theme="dark"] .dashboard.page-dashboard
+  .overview .bunk-card {
+  background: linear-gradient(
+    135deg,
+    #052e16,
+    #14532d
+  );
+  border-color: #15803d;
+}
+
+[data-theme="dark"] .dashboard.page-dashboard
+  .overview .shortage-card {
+  background: linear-gradient(
+    135deg,
+    #431407,
+    #7c2d12
+  );
+  border-color: #c2410c;
+}
+
+[data-theme="dark"] .dashboard.page-attendance
+  .today-summary {
+  background: linear-gradient(
+    135deg,
+    #082f49,
+    #172554
+  );
+  border-color: #075985;
+}
+
+[data-theme="dark"] .dashboard.page-attendance
+  .today-status span {
+  background: #1e293b;
+}
+
+[data-theme="dark"] .dashboard.page-attendance
+  .today-item {
+  background: #111827;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .dashboard.page-subjects
+  .subject-card {
+  background: #111827;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .dashboard.page-analytics
+  .attendance-card {
+  background: linear-gradient(
+    135deg,
+    #082f49,
+    #172554
+  );
+  border-color: #075985;
+}
+
+[data-theme="dark"] .dashboard.page-analytics
+  .bunk-card {
+  background: linear-gradient(
+    135deg,
+    #052e16,
+    #14532d
+  );
+  border-color: #15803d;
+}
+
+[data-theme="dark"] .dashboard.page-analytics
+  .shortage-card {
+  background: linear-gradient(
+    135deg,
+    #431407,
+    #7c2d12
+  );
+  border-color: #c2410c;
+}
+
+[data-theme="dark"] .dashboard.page-semesters
+  .semester-history-card {
+  background: linear-gradient(
+    135deg,
+    #172554,
+    #1e1b4b
+  );
+  border-color: #3730a3;
 }
